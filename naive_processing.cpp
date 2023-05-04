@@ -8,11 +8,30 @@ void naive_preprocessing(vector<int> a, int n){
 	}
 	for(int i = 0; i < n; i++){
 		for(int j = 0; j < n; j++){
-			int min = a[i];
+			int min = i;
 			for(int k = i; k <= j; k++){
-				if(a[k] < min) min = a[k];
+				if(a[k] < a[min]) min = k;
 			}
 			M[i][j] = min;
+		}
+	}
+}
+void dynamic_naive_preprocessing(vector<int> a, int n){
+	// Preprocessing the index of minimum element in every range
+	M.resize(n);
+	for (int i = 0; i < n; ++i) M[i].resize(n);
+	for(int i = 0; i < n; i++) M[i][i] = a[i];
+	cout << M[3][3];
+	for(int i = 0; i < n; i++){
+		for(int j = i+1 ; j < n; j++){
+			if(a[M[i][j-1]] < a[j]){
+				M[i][j] = M[i][j-1];
+			}
+			else{
+				M[i][j] = j;
+			}
+			if(i == 0) cout << M[i][j];
+
 		}
 	}
 }
@@ -27,10 +46,11 @@ int main(){
 	for(int i = 0; i < m; i++){
 		cin >> q[i].first >> q[i].second;
 	}
+//	dynamic_naive_preprocessing(a, n);
 	naive_preprocessing(a, n);
 	int Q = 0;
 	for(int i = 0 ;i < m; i++){
-		Q += M[q[i].first][q[i].second];
+		Q += a[M[q[i].first][q[i].second]];
 	}
 	cout << Q;
 }
